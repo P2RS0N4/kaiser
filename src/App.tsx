@@ -17,7 +17,7 @@ import { Sparkles, AlertTriangle, CheckCircle2, Info, ArrowUpRight } from 'lucid
 const MainContent: React.FC = () => {
   const {
     activeTab,
-    toast,
+    toastMessage,
     setSiteSubmissionModalOpen,
     setActiveSubmissionSubTab,
     setActiveTab
@@ -47,25 +47,25 @@ const MainContent: React.FC = () => {
       </main>
 
       {/* Toast Notification Pill */}
-      {toast && (
+      {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 animate-bounce-short">
           <div
             className={`px-4 py-3 rounded-lg shadow-lg border flex items-center gap-3 bg-white ${
-              toast.type === 'success'
+              toastMessage.type === 'success'
                 ? 'border-emerald-500 text-emerald-800'
-                : toast.type === 'alert'
+                : toastMessage.type === 'alert'
                 ? 'border-rose-500 text-rose-800'
                 : 'border-blue-500 text-blue-800'
             }`}
           >
-            {toast.type === 'success' ? (
+            {toastMessage.type === 'success' ? (
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            ) : toast.type === 'alert' ? (
+            ) : toastMessage.type === 'alert' ? (
               <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" />
             ) : (
               <Info className="w-5 h-5 text-blue-600 shrink-0" />
             )}
-            <span className="text-xs font-semibold">{toast.message}</span>
+            <span className="text-xs font-semibold">{toastMessage.text}</span>
           </div>
         </div>
       )}

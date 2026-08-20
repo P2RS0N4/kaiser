@@ -4,9 +4,9 @@ import { SiteInputPortal } from './SiteInputPortal';
 import { X } from 'lucide-react';
 
 export const SiteSubmissionModal: React.FC = () => {
-  const { isSiteSubmissionModalOpen, setSiteSubmissionModalOpen } = useApp();
+  const { siteSubmissionModalOpen, setSiteSubmissionModalOpen } = useApp();
 
-  if (!isSiteSubmissionModalOpen) return null;
+  if (!siteSubmissionModalOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-3 md:p-6">

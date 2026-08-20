@@ -17,12 +17,12 @@ import {
 } from 'lucide-react';
 
 export const WorkflowAutomationModal: React.FC = () => {
-  const { isWorkflowModalOpen, setWorkflowModalOpen, showToast } = useApp();
+  const { workflowModalOpen, setWorkflowModalOpen, showToast } = useApp();
   const [activeStep, setActiveStep] = useState<number>(1);
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [simulatedHighRisk, setSimulatedHighRisk] = useState<boolean>(false);
 
-  if (!isWorkflowModalOpen) return null;
+  if (!workflowModalOpen) return null;
 
   const STEPS = [
     {

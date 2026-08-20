@@ -83,41 +83,47 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+// Helper for safe localStorage access
+const getSavedData = <T,>(key: string, fallback: T): T => {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : fallback;
+  } catch (e) {
+    console.warn(`Error reading localStorage key "${key}":`, e);
+    return fallback;
+  }
+};
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<ProjectId>('proj-fpg');
   const [projects] = useState<Project[]>(INITIAL_PROJECTS);
   const [userRole, setUserRole] = useState<UserRole>('DIRECTOR');
   const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
 
-  const [dailyReports, setDailyReports] = useState<DailyReport[]>(() => {
-    const saved = localStorage.getItem('kaiser_daily_reports');
-    return saved ? JSON.parse(saved) : INITIAL_DAILY_REPORTS;
-  });
+  const [dailyReports, setDailyReports] = useState<DailyReport[]>(() => 
+    getSavedData('kaiser_daily_reports', INITIAL_DAILY_REPORTS)
+  );
 
-  const [manpowerEntries, setManpowerEntries] = useState<ManpowerEntry[]>(() => {
-    const saved = localStorage.getItem('kaiser_manpower');
-    return saved ? JSON.parse(saved) : INITIAL_MANPOWER;
-  });
+  const [manpowerEntries, setManpowerEntries] = useState<ManpowerEntry[]>(() => 
+    getSavedData('kaiser_manpower', INITIAL_MANPOWER)
+  );
 
-  const [hazards, setHazards] = useState<Hazard[]>(() => {
-    const saved = localStorage.getItem('kaiser_hazards');
-    return saved ? JSON.parse(saved) : INITIAL_HAZARDS;
-  });
+  const [hazards, setHazards] = useState<Hazard[]>(() => 
+    getSavedData('kaiser_hazards', INITIAL_HAZARDS)
+  );
 
-  const [correctiveActions, setCorrectiveActions] = useState<CorrectiveAction[]>(() => {
-    const saved = localStorage.getItem('kaiser_corrective_actions');
-    return saved ? JSON.parse(saved) : INITIAL_CORRECTIVE_ACTIONS;
-  });
+  const [correctiveActions, setCorrectiveActions] = useState<CorrectiveAction[]>(() => 
+    getSavedData('kaiser_corrective_actions', INITIAL_CORRECTIVE_ACTIONS)
+  );
 
-  const [inspections, setInspections] = useState<Inspection[]>(() => {
-    const saved = localStorage.getItem('kaiser_inspections');
-    return saved ? JSON.parse(saved) : INITIAL_INSPECTIONS;
-  });
+  const [inspections, setInspections] = useState<Inspection[]>(() => 
+    getSavedData('kaiser_inspections', INITIAL_INSPECTIONS)
+  );
 
-  const [equipment, setEquipment] = useState<Equipment[]>(() => {
-    const saved = localStorage.getItem('kaiser_equipment');
-    return saved ? JSON.parse(saved) : INITIAL_EQUIPMENT;
-  });
+  const [equipment, setEquipment] = useState<Equipment[]>(() => 
+    getSavedData('kaiser_equipment', INITIAL_EQUIPMENT)
+  );
 
   const [documents] = useState<SafetyDocument[]>(INITIAL_DOCUMENTS);
   const [alerts, setAlerts] = useState<AutomationAlert[]>(INITIAL_ALERTS);
@@ -131,15 +137,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Sync to local storage
   useEffect(() => {
-    localStorage.setItem('kaiser_daily_reports', JSON.stringify(dailyReports));
+    try {
+      localStorage.setItem('kaiser_daily_reports', JSON.stringify(dailyReports));
+    } catch (e) {
+      console.warn('Unable to persist daily reports', e);
+    }
   }, [dailyReports]);
 
   useEffect(() => {
-    localStorage.setItem('kaiser_hazards', JSON.stringify(hazards));
+    try {
+      localStorage.setItem('kaiser_hazards', JSON.stringify(hazards));
+    } catch (e) {
+      console.warn('Unable to persist hazards', e);
+    }
   }, [hazards]);
 
   useEffect(() => {
-    localStorage.setItem('kaiser_corrective_actions', JSON.stringify(correctiveActions));
+    try {
+      localStorage.setItem('kaiser_corrective_actions', JSON.stringify(correctiveActions));
+    } catch (e) {
+      console.warn('Unable to persist corrective actions', e);
+    }
   }, [correctiveActions]);
 
   const showToast = (text: string, type: 'success' | 'alert' | 'info' = 'success') => {
