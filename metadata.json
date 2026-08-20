@@ -1,0 +1,6 @@
+{
+  "name": "Kaiser SmartSite 360",
+  "description": "Digital Project & HSE Management System for Kaiser Engineering Sdn. Bhd. Featuring centralized site reporting, live management dashboard, manpower & hazard tracking, inspection compliance, and AI intelligence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
