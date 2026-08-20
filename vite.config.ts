@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(({ command }) => {
   return {
-    base: process.env.VITE_BASE || (command === 'serve' ? '/' : '/kaiser/'),
+    base: command === 'serve' ? '/' : '/kaiser/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
@@ -15,6 +15,11 @@ export default defineConfig(({ command }) => {
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+    build: {
+      outDir: 'dist',
+      emptyOutDir: true,
+      assetsDir: 'assets',
     },
   };
 });
